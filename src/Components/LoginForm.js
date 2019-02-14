@@ -17,39 +17,52 @@ class LoginForm extends Component {
     this.setState({password: text})
   }
 
- onPress = () => {
-   this.setState({loading: true})
-   const { email, password } = this.state;
-   firebase.auth().signInWithEmailAndPassword(email, password)
-   .then(this.onSucess)
-   .catch(() => {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .catch(() => {
-              this.setState({loading: false})
-              Alert.alert("Login failed","Authentication Failed",{ text: "OK" });
-        });
-   });
- }
+   onLogin = () => {
+        this.setState({loading: true})
+        const { email, password } = this.state;
 
- onSucess(){
-   this.setState({
-     email: '',
-     password: '',
-     loading: false
-   })
-   Alert.alert("Login Sucess","Authentication Sucess",{ text: "OK" });
- }
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => this.alertMessage("Login", "Login sucess"))
+        .catch((erro) => this.alertMessage("Login", erro.message))
+   }
+
+    onRegister = () => {
+        this.setState({loading: true})
+        const { email, password } = this.state;
+
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => this.alertMessage("Register", "Register sucess"))
+        .catch((erro) => this.alertMessage("Register", erro.message))
+   }
+
+
+   alertMessage(title, message){
+      this.setState({loading: false})
+      Alert.alert(title, message, {text: "OK" })
+   }
+
 
  renderButton() {
    if (this.state.loading){
-     return <Spinner />
+     return <Spinner size="large" />
    }
    else {
-     return <Button
-       onPress={this.onPress}
-       title="Login"
-       color="#36B2B2"
-     />
+     return (
+        <View>
+          <Button
+           onPress={this.onLogin}
+           title="Login"
+           color="#36B2B2"
+          />
+
+           <Button
+           onPress={this.onRegister}
+           title="Register"
+           color="#36B2B2"
+          />
+
+        </View>
+      );
    }
  }
 
@@ -57,7 +70,7 @@ class LoginForm extends Component {
     const { container, textStyle, Input } = styles;
     return (
       <View style = {container}>
-        <Text style = {textStyle}>Login</Text>
+        <Text style={textStyle}>Login/Register</Text>
         <TextInput
             style = {Input}
             autoCapitalize = 'none'

@@ -2,9 +2,9 @@ import React from 'react';
 import {Text, View} from 'react-native';
 
 const Header = (props) => {
-  const { viewStyle, textStyle } = styles;
+  const { viewStyle, textStyle, Logo } = styles;
   return (
-    <View style={viewStyle}>
+    <View style={viewStyle}> 
       <Text style={textStyle}>{props.NavText}</Text>
     </View>
   );
